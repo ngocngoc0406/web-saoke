@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quyên góp và mua hàng</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  h1 {
+    color: #333;
+  }
+
+  ul.nav-tabs {
+    margin-bottom: 20px;
+  }
+
+  ul.nav-tabs li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  ul.nav-tabs li a {
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    color: #201e36;
+  }
+
+  ul.nav-tabs li a.active {
+    background-color: #ccc;
+    color: #fff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f0f0f0;
+  }
+
+  form {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  button[type="submit"] {
+    padding: 5px 10px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  p span {
+    font-weight: bold;
+  }
+</style>
+  <h1>Quyên góp và mua hàng</h1>
+
+  <input type="text" id="searchInput" placeholder="Tìm kiếm...">
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-tab="donations" href="#">Quyên góp</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-tab="purchases" href="#">Mua hàng</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="donations">
+      <h2>Danh sách quyên góp</h2>
+      <table id="donationTable">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Họ tên</th>
+            <th>Căn cước công dân</th>
+            <th>Số tiền</th>
+          </tr>
+        </thead>
+        <tbody id="donationTableBody"></tbody>
+      </table>
+      <p>Tổng quyên góp: <span id="totalDonation"></span></p>
+
+      <h2>Thêm quyên góp mới</h2>
+      <form id="donationForm">
+        <label for="hoTenInput">Họ tên:</label>
+        <input type="text" id="hoTenInput" required><br>
+
+        <label for="canCuocCongDanInput">Căn cước công dân:</label>
+        <input type="text" id="canCuocCongDanInput" required><br>
+
+        <label for="soTienInput">Số tiền:</label>
+        <input type="number" id="soTienInput" required><br>
+
+        <button type="submit">Thêm</button>
+      </form>
+    </div>
+    <div class="tab-pane" id="purchases">
+      <h2>Danh sách mua hàng</h2>
+      <table id="purchaseTable">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên vật phẩm</th>
+            <th>Số lượng</th>
+            <th>Minh chứng</th>
+            <th>Số tiền</th>
+          </tr>
+        </thead>
+        <tbody id="purchaseTableBody"></tbody>
+      </table>
+      <p>Tổng mua hàng: <span id="totalPurchase"></span></p>
+
+      <h2>Thêm mua hàng mới</h2>
+      <form id="purchaseForm">
+        <label for="tenVatPhamInput">Tên vật phẩm:</label>
+        <input type="text" id="tenVatPhamInput" required><br>
+
+        <label for="soLuongInput">Số lượng:</label>
+        <input type="number" id="soLuongInput" required><br>
+
+        <label for="minhChungInput">Minh chứng:</label>
+        <input type="text" id="minhChungInput" required><br>
+
+        <label for="soTienInput">Số tiền:</label>
+        <input type="number" id="soTienInput" required><br>
+
+        <button type="submit">Thêm</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    var donations = [
+      { stt: 1, hoTen: "Nguyễn Văn A", canCuocCongDan: "123456789", soTien: 100000 },
+      { stt: 2, hoTen: "Trần Thị B", canCuocCongDan: "987654321", soTien: 200000 },
+      { stt: 3, hoTen: "Lê Văn C", canCuocCongDan: "567891234", soTien: 150000 },
+      { stt: 4, hoTen: "Phạm Thị D", canCuocCongDan: "432198765", soTien: 300000 },
+      { stt: 5, hoTen: "Hoàng Văn E", canCuocCongDan: "789123456", soTien: 250000 }
+    ];
+
+    var purchases = [
+      { stt: 1, tenVatPham: "Áo phông", soLuong: 2, minhChung: "ao-phong.jpg", soTien: 200000 },
+      { stt: 2, tenVatPham: "Quần jean", soLuong: 1, minhChung: "quan-jean.jpg", soTien: 150000 },
+      { stt: 3, tenVatPham: "Giày thể thao", soLuong: 1, minhChung: "giay-the-thao.jpg", soTien: 300000 },
+      { stt: 4, tenVatPham: "Túi xách", soLuong: 1, minhChung: "tui-xach.jpg", soTien: 250000 },
+      { stt: 5, tenVatPham: "Mũ bảo hiểm", soLuong: 1, minhChung: "mu-bao-hiem.jpg", soTien: 100000 }
+    ];
+
+    $(document).ready(function() {
+      renderDonations(donations);
+      renderPurchases(purchases);
+
+      $("#searchInput").on("keyup", function() {
+        var keyword = $(this).val().toLowerCase();
+        var activeTab = $(".nav-link.active").data("tab");
+
+        if (activeTab === "donations") {
+          var filteredDonations = donations.filter(function(donation) {
+            return donation.hoTen.toLowerCase().indexOf(keyword) > -1;
+          });
+          renderDonations(filteredDonations);
+        } else if (activeTab === "purchases") {
+          var filteredPurchases = purchases.filter(function(purchase) {
+            return purchase.tenVatPham.toLowerCase().indexOf(keyword) > -1;
+          });
+          renderPurchases(filteredPurchases);
+        }
+      });
+
+      $(".nav-link").on("click", function(e) {
+        e.preventDefault();
+        $(this).tab("show");
+        var activeTab = $(this).data("tab");
+        $("#searchInput").val("");
+        $("#searchInput").trigger("keyup");
+      });
+
+      $("#donationForm").on("submit", function(e) {
+        e.preventDefault();
+        var hoTen = $("#hoTenInput").val();
+        var canCuocCongDan = $("#canCuocCongDanInput").val();
+        var soTien = parseInt($("#soTienInput").val());
+
+        var newDonation = {
+          stt: donations.length + 1,
+          hoTen: hoTen,
+          canCuocCongDan: canCuocCongDan,
+          soTien: soTien
+        };
+
+        donations.push(newDonation);
+        renderDonations(donations);
+
+        $("#hoTenInput").val("");
+        $("#canCuocCongDanInput").val("");
+        $("#soTienInput").val("");
+      });
+
+      $("#purchaseForm").on("submit", function(e) {
+        e.preventDefault();
+        var tenVatPham = $("#tenVatPhamInput").val();
+        var soLuong = parseInt($("#soLuongInput").val());
+        var minhChung = $("#minhChungInput").val();
+        var soTien = parseInt($("#soTienInput").val());
+
+        var newPurchase = {
+          stt: purchases.length + 1,
+          tenVatPham: tenVatPham,
+          soLuong: soLuong,
+          minhChung: minhChung,
+          soTien: soTien
+        };
+
+        purchases.push(newPurchase);
+        renderPurchases(purchases);
+
+        $("#tenVatPhamInput").val("");
+        $("#soLuongInput").val("");
+        $("#minhChungInput").val("");
+        $("#soTienInput").val("");
+      });
+    });
+
+    function renderDonations(donations) {
+      var donationTableBody = $("#donationTableBody");
+      donationTableBody.empty();
+
+      var totalDonation = 0;
+
+      donations.forEach(function(donation) {
+        var row = $("<tr></tr>");
+        row.append("<td>" + donation.stt + "</td>");
+        row.append("<td>" + donation.hoTen + "</td>");
+        row.append("<td>" + donation.canCuocCongDan + "</td>");
+        row.append("<td>" + donation.soTien + "</td>");
+        donationTableBody.append(row);
+
+        totalDonation += donation.soTien;
+      });
+
+      $("#totalDonation").text(totalDonation);
+    }
+
+    function renderPurchases(purchases) {
+      var purchaseTableBody = $("#purchaseTableBody");
+      purchaseTableBody.empty();
+
+      var totalPurchase = 0;
+
+      purchases.forEach(function(purchase) {
+        var row = $("<tr></tr>");
+        row.append("<td>" + purchase.stt + "</td>");
+        row.append("<td>" + purchase.tenVatPham + "</td>");
+        row.append("<td>" + purchase.soLuong + "</td>");
+        row.append("<td><img src='" + purchase.minhChung + "' width='50' height='50'></td>");
+        row.append("<td>" + purchase.soTien + "</td>");
+        purchaseTableBody.append(row);
+
+        totalPurchase += purchase.soTien;
+      });
+
+      $("#totalPurchase").text(totalPurchase);
+    }
+  </script>
+</body>
+</html>
